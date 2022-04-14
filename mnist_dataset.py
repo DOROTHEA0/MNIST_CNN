@@ -10,7 +10,7 @@ class MnistDataSet(Dataset):
 
     def __getitem__(self, item):
         data = torch.unsqueeze(torch.from_numpy(self.data[item]).float() / 255, 0)
-        label = torch.from_numpy(np.array([self.label[item]]))
+        label = self.label[item]
         return data, label
 
     def __len__(self):
