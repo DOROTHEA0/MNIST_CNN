@@ -20,9 +20,9 @@ class MnistCNN(nn.Module):
         )
         self.fc_layer = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(1024, 1024),
+            nn.Linear(in_features=1024, out_features=1024),
             nn.ReLU(),
-            nn.Linear(1024, 10)
+            nn.Linear(in_features=1024, out_features=10)
         )
 
     def forward(self, x):
