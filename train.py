@@ -1,10 +1,8 @@
 import argparse
 
-import torch.utils.data
+import cv2
 
-from model.cnn import CNNTrainer
-from mnist_dataset import MnistDataSet
-
+from model.cnn import CNNTrainer, MnistCNN
 
 def get_args_parser():
     """
@@ -12,7 +10,7 @@ def get_args_parser():
     :return:
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument("--epochs", type=int, default=10, help="number of epochs of training")
+    parser.add_argument("--epochs", type=int, default=15, help="number of epochs of training")
     parser.add_argument("--batch_size", type=int, default=64, help="number of batch of each epoch")
     parser.add_argument("--num_works", type=int, default=6, help="number of thread works")
     parser.add_argument("--lr", type=float, default=1e-3, help="learning rate")
@@ -26,5 +24,7 @@ def get_args_parser():
 
 if __name__ == '__main__':
     args = get_args_parser()
-    trainer = CNNTrainer(args)
+    trainer = CNNTrainer(args, MnistCNN())
     trainer.train()
+
+

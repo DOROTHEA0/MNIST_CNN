@@ -10,12 +10,13 @@ class MnistDataSet(Dataset):
     """
 
     """
-    def __init__(self, data_path, label_path):
+    def __init__(self, data_path, label_path, data_training=True):
         self.data = np.load(data_path)['arr_0']
         self.label = np.load(label_path)['arr_0']
+        self.data_training = data_training
 
     def __getitem__(self, item):
-        data = transform(self.data[item])
+        data = train_transform(self.data[item]) if self.data_training else val_transform(self.data[item])
         label = self.label[item]
         return data, label
 
@@ -23,7 +24,7 @@ class MnistDataSet(Dataset):
         return len(self.label)
 
 
-def transform(img: np.ndarray) -> torch.Tensor:
+def train_transform(img: np.ndarray) -> torch.Tensor:
     """
 
     :param img: input image type was ndarray
@@ -35,5 +36,17 @@ def transform(img: np.ndarray) -> torch.Tensor:
     img_transform = (img_transform - 0.5).true_divide(0.5)
     random_h, random_w = random.randint(0, 7), random.randint(0, 7)
     img_transform = img_transform[random_h: random_h + 28, random_w: random_w + 28]
+    img_transform = torch.unsqueeze(img_transform, 0)
+    return img_transform
+
+
+def val_transform(img: np.ndarray) -> torch.Tensor:
+    """
+
+    :param img:
+    :return:
+    """
+    img_transform = torch.from_numpy(img).float() / 255
+    img_transform = (img_transform - 0.5).true_divide(0.5)
     img_transform = torch.unsqueeze(img_transform, 0)
     return img_transform
