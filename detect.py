@@ -1,12 +1,12 @@
 import torch
 import model.cnn
-from model.cnn import CNNTrainer, detect_image, MnistCNN
+from model.cnn import CNNTrainer, detect_image, MnistCNN, MyMnistCNN
 import argparse
 
 
 def get_args_parser():
     """
-
+    get parameters for model evaluate
     :return:
     """
     parser = argparse.ArgumentParser()
@@ -25,10 +25,10 @@ if __name__ == '__main__':
     if '.npz' in args.test_data:
         trainer = CNNTrainer(args, model.cnn.MnistCNN())
         trainer.load(args.saved_model)
-        print(trainer.best_acc)
+        print('model accuracy:', trainer.best_acc)
         trainer.validate()
     else:
-        model = MnistCNN()
+        model = MyMnistCNN()
         model.load_state_dict(torch.load(args.saved_model)['state_dict'])
         device = args.device
         print(idx_to_result[detect_image(args.test_data, model, device)])
